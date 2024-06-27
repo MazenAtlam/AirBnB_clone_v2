@@ -19,6 +19,7 @@ class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
 
+    places_id = Column(Integer, primary_key=True)
     city_id = Column(String(60), ForeignKey('cities_id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users_id'), nullable=False)
     name = Column(String(128), nullable=False)
@@ -45,10 +46,11 @@ class Place(BaseModel, Base):
             """
             all_amenities = list(storage.all(Amenity).values())
             place_amenities = []
-            place_amenities.append(a for a in all_amenities if a.id in self.amenity_ids)
+            place_amenities.append(a for a in all_amenities\
+                if a.amenity_id in self.amenity_ids)
             return place_amenities
 
         @amanities.setter
         def amanities(self, obj):
             if obj is not None and isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
+                self.amenity_ids.append(obj.amenity_id)
