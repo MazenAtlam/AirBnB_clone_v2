@@ -2,3 +2,6 @@ fastPush
 
 # VS Code
 .vscode/
+
+
+__pycache__/
