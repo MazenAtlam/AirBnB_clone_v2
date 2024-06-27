@@ -2,14 +2,15 @@
 """ Review module for the HBNB project """
 from models.base_model import Base, BaseModel
 from sqlalchemy.orm import relationship
-from sqlalchemy import String, Column, ForeignKey
+from sqlalchemy import String, Column, ForeignKey, Integer
 
 class Review(BaseModel , Base):
     """ Review classto store review information """
     __tablename__ = 'reviews'
+
+    reviews_id = Column(Integer, primary_key=True)
     place_id = Column(String(60), ForeignKey('places.id'))
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     text = Column(String(1024), nullable=False)
     user = relationship('User', back_populates='reviews')
     place = relationship('Place', back_populates='reviews')
-
