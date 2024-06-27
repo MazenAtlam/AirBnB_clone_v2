@@ -6,6 +6,4 @@ from sqlalchemy import Column, Integer
 
 class State(BaseModel):
     """ State class """
-    
-    states_id = Column(Integer, primary_key=True)
     name = ""
