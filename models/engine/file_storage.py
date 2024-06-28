@@ -10,7 +10,7 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage
-        
+
         Args:
             cls (class, optional): If spicified, the method should return
             only the objects of one type of cls
