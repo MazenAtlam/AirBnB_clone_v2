@@ -9,7 +9,6 @@ from ..amenity import Amenity
 from ..place import Place
 from ..review import Review
 from sqlalchemy import create_engine
-from base_model import Base
 from ..base_model import Base
 
 class DBStorage:
@@ -70,4 +69,3 @@ class DBStorage:
         session_factory =  sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
-
