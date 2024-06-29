@@ -20,10 +20,10 @@ class Amenity(BaseModel, Base):
     """ This class defines an amenity by various attributes
     """
     __tablename__ = 'amenities'
-    if ENV_VAR['hbnb_storage_type'] == "file":
-        name = ""
-    else:
+    if ENV_VAR['hbnb_storage_type'] == "db":
         name = Column(String(128), nullable=False)
         # place_amenities = relationship('Place', secondary=place_amenity,\
                                     # back_populates='places')
+    else:
+        name = ""
 

@@ -19,19 +19,7 @@ from models import storage
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
-    if ENV_VAR['hbnb_storage_type'] == "file":
-            city_id = ""
-            user_id = ""
-            name = ""
-            description = ""
-            number_rooms = 0
-            number_bathrooms = 0
-            max_guest = 0
-            price_by_night = 0
-            latitude = 0.0
-            longitude = 0.0
-            amenity_ids = []
-    else:
+    if ENV_VAR['hbnb_storage_type'] == "db":
         id = BaseModel.id
         created_at = BaseModel.created_at
         updated_at = BaseModel.updated_at
@@ -48,6 +36,18 @@ class Place(BaseModel, Base):
         reviews = relationship('Review', back_populates='place',
                            cascade="all, delete-orphan")
         # amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
+    else:
+        city_id = ""
+        user_id = ""
+        name = ""
+        description = ""
+        number_rooms = 0
+        number_bathrooms = 0
+        max_guest = 0
+        price_by_night = 0
+        latitude = 0.0
+        longitude = 0.0
+        amenity_ids = []
 
     if ENV_VAR['hbnb_storage_type'] == 'file':
         @property
