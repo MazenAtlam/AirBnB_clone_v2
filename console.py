@@ -130,6 +130,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = args_list.pop(0)
             new_instance = HBNBCommand.classes[class_name]()
             if len(args_list) >= 1:
+                args_list = args_list[0].split(" ")
                 for par_list in args_list:
                     par = par_list.split("=")
                     if par[1].startswith('"'):
