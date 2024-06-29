@@ -134,9 +134,9 @@ class HBNBCommand(cmd.Cmd):
                 for par_list in args_list:
                     par = par_list.split("=")
                     if par[1].startswith('"'):
-                        par[1] = par[1][1:-1]
-                    # String
+                        # String
                         # Escape double qoutes
+                        par[1] = par[1][1:-1]
 
                         # Replace Spaces With _
                         par[1] = par[1].replace(' ', "_")
@@ -151,6 +151,7 @@ class HBNBCommand(cmd.Cmd):
                         continue
                     setattr(new_instance, par[0], par[1])
         print(new_instance.id)
+        storage.new(new_instance)
         storage.save()
 
     def help_create(self):
