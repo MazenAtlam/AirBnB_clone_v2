@@ -9,6 +9,8 @@ from ..amenity import Amenity
 from ..place import Place
 from ..review import Review
 from sqlalchemy import create_engine
+from base_model import Base
+from ..base_model import Base
 
 class DBStorage:
     classes = {
@@ -24,7 +26,6 @@ class DBStorage:
                                                   ENV_VAR['hbnb_host'], ENV_VAR['hbnb_db'])
                                           , pool_pre_ping=True)
             if ENV_VAR['hbnb_env'] == 'test':
-                from base_model import Base
                 Base.metadate.drop_all(self.__engine)
     def all(self, cls=None):
         """
@@ -65,7 +66,6 @@ class DBStorage:
         Create All Tables in the db
         Create Current db session
         """
-        from ..base_model import Base
         Base.metadata.create_all(self.__engine)
         session_factory =  sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
