@@ -1,9 +1,16 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 from models.base_model import BaseModel
-from sqlalchemy import Column, Integer
-
+from models.config import ENV_VAR
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 class State(BaseModel):
     """ State class """
-    name = ""
+    __tablename__ = 'states'
+    if ENV_VAR['hbnb_storage_type'] == "file":
+        name = ""
+    else:
+        name = Column(String(128), nullable=False)
+        cities = relationship('City', back_populates="state")
+

@@ -1,7 +1,14 @@
 #!/usr/bin/python3
-from console.HBNBCommand import config
-from sqlalchemy import String, Column
+
+from models.config import ENV_VAR
 from sqlalchemy.orm import sessionmaker, scoped_session
+from ..state import State
+from ..city import City
+from ..user import User
+from ..amenity import Amenity
+from ..place import Place
+from ..review import Review
+
 class DBStorage:
     classes = {
             'User': User, 'Place': Place,
@@ -12,12 +19,12 @@ class DBStorage:
     __session = None
     def __init__(self):
             self.__engine = create_engine("mysql+mysqldb://{}:{}@{}/{}"
-                                          .format(config['hbnb_usr'], config['hbnb_usr_pwd'],
-                                                  config['hbnb_host'], config['hbnb_db'])
+                                          .format(ENV_VAR['hbnb_usr'], ENV_VAR['hbnb_usr_pwd'],
+                                                  ENV_VAR['hbnb_host'], ENV_VAR['hbnb_db'])
                                           , pool_pre_ping=True)
             if config['hbnb_env'] == 'test':
-                    # Drop All Tables
-                    pass
+                from base_model import Base
+                Base.metadate.drop_all(self.__engine)
     def all(self, cls=None):
         """
         querying a specific table in the db if cls is specified
@@ -28,7 +35,7 @@ class DBStorage:
             for obj in self.__session.query(cls).all():
                 temp_dict.update({f"{cls}.{obj.id}" : obj})
         else:
-            for value in BStorage.classes.values():
+            for value in DBStorage.classes.values():
                 for obj in self.__session.query(value).all():
                     temp_dict.update({f"{value}.{obj.id}" : obj})
         return temp_dict
@@ -40,7 +47,7 @@ class DBStorage:
         self.__session.add(obj)
     def save(self):
         """
-        commit all changes in th current db seession
+        commit all changes in th current db session
         """
         self.__session.commit()
     def delete(self, obj=None):
@@ -52,8 +59,7 @@ class DBStorage:
             self.save(self)
     def reload(self):
         from ..base_model import Base
-        from ..state import State
-        from ..city import City
+
         Base.metadata.create_all(self.__engine)
         session_factory =  sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
