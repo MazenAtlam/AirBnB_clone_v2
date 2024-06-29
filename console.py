@@ -134,7 +134,6 @@ class HBNBCommand(cmd.Cmd):
                 for par_list in args_list:
                     par = par_list.split("=")
                     if par[1].startswith('"'):
-                        print(par[1])
                         par[1] = par[1][1:-1]
                     # String
                         # Escape double qoutes
