@@ -12,9 +12,9 @@ class City(BaseModel, Base):
     if ENV_VAR['hbnb_storage_type'] == "db":
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
         name = Column(String(128), nullable=False)
+
         # places = relationship('Place', back_populates='cities',\
-        #                         cascade="all, delete-orphan")
-    
+        #                         cascade="all, delete-orphan")    
     else:
             state_id = ""
             name = ""
