@@ -32,15 +32,20 @@ class DBStorage:
         Otherwise all tables in db is queried
         """
         temp_dict = {}
+
         if cls is not None:
             if isinstance(cls, str):
+                print(cls)
                 cls = globals().get(cls)
-            for obj in self.__session.query(cls).all():
-                temp_dict.update({f"{cls}.{obj.id}" : obj})
+                print(cls)
+
+            for obj in self.__session.query(cls):
+                temp_dict.update({f"{cls.__name__}.{obj.id}" : obj})
         else:
+            ######################
             for value in DBStorage.classes.values():
                 for obj in self.__session.query(value).all():
-                    temp_dict.update({f"{value}.{obj.id}" : obj})
+                    temp_dict.update({f"{value.__name__}.{obj.id}" : obj})
         return temp_dict
 
     def new(self, obj):

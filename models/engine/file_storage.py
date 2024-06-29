@@ -1,7 +1,14 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
-
+from models.base_model import BaseModel
+from ..state import State
+from ..city import City
+from ..user import User
+from ..amenity import Amenity
+from ..place import Place
+from ..review import Review
+from ..base_model import Base
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -12,19 +19,18 @@ class FileStorage:
         """Returns a dictionary of models currently in storage
 
         Args:
-            cls (class, optional): If spicified, the method should return
+            cls (class, optional): If specified, the method should return
             only the objects of one type of cls
 
         Returns:
             A dectionary of models currently in storage
         """
-        from models.base_model import BaseModel
+
 
         if cls is not None:
             cls_objects = {}
             if isinstance(cls, str):
                 cls = globals().get(cls)
-
             if cls is not None and issubclass(cls, BaseModel):
                 for key, value in self.__objects.items():
                     if isinstance(value, cls):
