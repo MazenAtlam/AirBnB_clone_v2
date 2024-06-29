@@ -5,7 +5,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.amenity import Amenity
-from models import storage
 
 # from .amenity import Amenity
 # metadata = Base.metadata
@@ -49,7 +48,6 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    if ENV_VAR['hbnb_storage_type'] == 'file':
         @property
         def amenities(self):
             """Getter attribute amenities that returns a list of Amenity instances based on
@@ -58,6 +56,7 @@ class Place(BaseModel, Base):
             Returns:
                 list: A list of Amenity instances linked to this Place
             """
+            from models.__init__ import storage
             all_amenities = list(storage.all(Amenity).values())
             place_amenities = []
             place_amenities.append(a for a in all_amenities\
@@ -68,4 +67,3 @@ class Place(BaseModel, Base):
         def amenities(self, obj):
             if obj is not None and isinstance(obj, Amenity):
                 self.amenity_ids.append(obj.amenity_id)
-
