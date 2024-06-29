@@ -8,6 +8,7 @@ from ..user import User
 from ..amenity import Amenity
 from ..place import Place
 from ..review import Review
+from sqlalchemy import create_engine
 
 class DBStorage:
     classes = {
@@ -22,7 +23,7 @@ class DBStorage:
                                           .format(ENV_VAR['hbnb_usr'], ENV_VAR['hbnb_usr_pwd'],
                                                   ENV_VAR['hbnb_host'], ENV_VAR['hbnb_db'])
                                           , pool_pre_ping=True)
-            if config['hbnb_env'] == 'test':
+            if ENV_VAR['hbnb_env'] == 'test':
                 from base_model import Base
                 Base.metadate.drop_all(self.__engine)
     def all(self, cls=None):
@@ -32,6 +33,8 @@ class DBStorage:
         """
         temp_dict = {}
         if cls is not None:
+            if isinstance(cls, str):
+                cls = globals().get(cls)
             for obj in self.__session.query(cls).all():
                 temp_dict.update({f"{cls}.{obj.id}" : obj})
         else:
@@ -58,8 +61,11 @@ class DBStorage:
             self.__session.delete(obj)
             self.save(self)
     def reload(self):
+        """
+        Create All Tables in the db
+        Create Current db session
+        """
         from ..base_model import Base
-
         Base.metadata.create_all(self.__engine)
         session_factory =  sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
