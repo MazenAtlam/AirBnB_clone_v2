@@ -15,7 +15,12 @@ place_amenity = Table('place_amenity', metadata,\
 
 class Place(BaseModel, Base):
     """ A place to stay """
+
     __tablename__ = 'places'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)
@@ -47,6 +52,7 @@ class Place(BaseModel, Base):
             """
             from models.__init__ import storage
             from models.amenity import Amenity
+
             all_amenities = list(storage.all(Amenity).values())
             place_amenities = []
             place_amenities.append(a for a in all_amenities\
@@ -56,5 +62,6 @@ class Place(BaseModel, Base):
         @amenities.setter
         def amenities(self, obj):
             from models.amenity import Amenity
+
             if obj is not None and isinstance(obj, Amenity):
                 self.amenity_ids.append(obj.amenity_id)

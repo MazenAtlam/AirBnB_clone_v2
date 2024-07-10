@@ -8,4 +8,4 @@ ENV_VAR = {
             'hbnb_db' : os.getenv("HBNB_MYSQL_DB"),
             'hbnb_storage_type' : os.getenv("HBNB_TYPE_STORAGE"),
             'hbnb_host' : os.getenv('HBNB_MYSQL_HOST')
-    }
+            }

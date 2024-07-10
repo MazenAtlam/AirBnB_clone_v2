@@ -12,6 +12,7 @@ from ..base_model import Base
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
+
     __file_path = 'file.json'
     __objects = {}
 
@@ -25,7 +26,6 @@ class FileStorage:
         Returns:
             A dectionary of models currently in storage
         """
-
 
         if cls is not None:
             cls_objects = {}
@@ -87,5 +87,6 @@ class FileStorage:
         Return:
             Nothing
         """
+
         if obj is not None:
             self.all().pop(obj.to_dict()['__class__'] + '.' + obj.id, None)

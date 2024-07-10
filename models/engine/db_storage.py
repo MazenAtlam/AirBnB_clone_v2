@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""This module defines a class to manage database storage for hbnb clone"""
 
 from models.config import ENV_VAR
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -11,12 +12,16 @@ from ..review import Review
 from sqlalchemy import create_engine
 from ..base_model import Base
 
+
 class DBStorage:
+    """This class manages storage of hbnb models in tables"""
+
     classes = {
             'User': User, 'Place': Place,
             'State': State, 'City': City, 'Amenity': Amenity,
             'Review': Review
             }
+
     __engine = None
     __session = None
     def __init__(self):
@@ -26,6 +31,7 @@ class DBStorage:
                                           , pool_pre_ping=True)
             if ENV_VAR['hbnb_env'] == 'test':
                 Base.metadate.drop_all(self.__engine)
+
     def all(self, cls=None):
         """
         querying a specific table in the db if cls is specified
@@ -42,7 +48,6 @@ class DBStorage:
             for obj in self.__session.query(cls):
                 temp_dict.update({f"{cls.__name__}.{obj.id}" : obj})
         else:
-            ######################
             for value in DBStorage.classes.values():
                 for obj in self.__session.query(value).all():
                     temp_dict.update({f"{value.__name__}.{obj.id}" : obj})
@@ -55,11 +60,13 @@ class DBStorage:
         obj = self.__session.merge(obj)
         self.__session.add(obj)
         self.__session.commit()
+
     def save(self):
         """
         commit all changes in th current db session
         """
         self.__session.commit()
+
     def delete(self, obj=None):
         """
         delete obj from the current db session
@@ -67,6 +74,7 @@ class DBStorage:
         if obj is not None:
             self.__session.delete(obj)
             self.save(self)
+
     def reload(self):
         """
         Create All Tables in the db

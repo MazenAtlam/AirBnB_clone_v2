@@ -94,7 +94,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
-        exit()
+        return True
 
     def help_quit(self):
         """ Prints the help documentation for quit  """
@@ -113,46 +113,49 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        temp_dict = {}
-        if not args:
-            print("** class name missing **")
-            return
-        # elif args not in HBNBCommand.classes:
-        #     print("** class doesn't exist **")
-        #     return
-        else:
-            args_list = args.split(" ", 1)
-            if args_list[0] not in HBNBCommand.classes:
+    def do_create(self, arg):
+        """
+        Create a new instance of BaseModel and save it to the JSON file.
+        Usage: create <class_name>
+        """
+        try:
+            command = arg.split(" ")
+            class_name = command[0]
+            if len(class_name) == 0:
+                print("** class name missing **")
+                return
+            if class_name and class_name not in self.classes.keys():
                 print("** class doesn't exist **")
                 return
-            class_name = args_list.pop(0)
-            new_instance = HBNBCommand.classes[class_name]()
-            if len(args_list) >= 1:
-                args_list = args_list[0].split(" ")
-                for par_list in args_list:
-                    par = par_list.split("=")
-                    if par[1].startswith('"'):
-                        # String
-                        # Escape double qoutes
-                        par[1] = par[1][1:-1]
 
-                        # Replace Spaces With _
-                        par[1] = par[1].replace(' ', "_")
-                    elif par[1].find(".") != -1:
-                        # Float
-                        par[1] = float(par[1])
-                    elif par[1].isdecimal():
-                        # Integer (Default)
-                        par[1] = int(par[1])
+            cls = eval(class_name)
+            kwargs = {}
+            temp_instance = cls()
+            for i in range(1, len(command)):
+                key, value = map(str, command[i].split("="))
+
+                if hasattr(temp_instance, key):
+                    if value.startswith('"'):
+                        value = str(value.strip('"').replace('_', ' '))
+                    elif '.' in value:
+                        value = float(value)
                     else:
-                        # Not Recognized Param (Skip)
-                        continue
-                    setattr(new_instance, par[0], par[1])
-        print(new_instance.id)
-        storage.new(new_instance)
-        storage.save()
+                        value = int(value)
+
+                    kwargs[key] = value
+
+            if kwargs == {}:
+                new_instance = temp_instance
+            else:
+                kwargs.update(temp_instance.to_dict())
+                del temp_instance
+                new_instance = cls(**kwargs)
+
+            storage.new(new_instance)
+            print(new_instance.id)
+            storage.save()
+        except ValueError:
+            print(ValueError)
 
     def help_create(self):
         """ Help information for the create method """

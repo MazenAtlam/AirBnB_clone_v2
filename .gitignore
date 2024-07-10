@@ -1,7 +1,9 @@
+# Pusher
 fastPush
 
 # VS Code
 .vscode/
 
-
+# Output
 __pycache__/
+file.json
